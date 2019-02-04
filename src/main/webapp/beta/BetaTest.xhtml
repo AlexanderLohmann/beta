@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <head>
+        <title>View</title>
+    </head>
+    <h:form id="Form">
+        <body>
+            <h1>Huhu</h1>
+            <p:commandButton value="Fill List" actionListener="#{contactController.betaMethod()}" update="Form" process="@this"/>
+            <p:dataTable id="Contacts" var="contacts" value="#{contactController.contact}">
+                <f:facet name="header">
+                    Kontakte
+                </f:facet>
+                <p:column headerText="Titel">
+                    <h:outputText value="#{contacts.title}"/>
+                </p:column>
+                <p:column headerText="Vorname">
+                    <h:outputText value="#{contacts.firstName}"/>
+                </p:column>
+                <p:column headerText="Nachname">
+                    <h:outputText value="#{contacts.lastName}"/>
+                </p:column>
+                <p:column headerText="Geschlecht">
+                    <h:outputText value="#{contacts.sex}"/>
+
+                </p:column>
+                <p:column headerText="Anschrift">
+                    <p:dataList id="adresses" var="adress" type="definition" value="#{contacts.addresses}" >
+                        <h:outputText value="#{adress.street}"/>
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="Postleitzahl">
+                    <p:dataList id="zipcode" var="zipcode" type="definition" value="#{contacts.addresses}">
+                        <h:outputText  value="#{zipcode.zipCode}" />
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="Stadt">
+                    <p:dataList id="city" var="city" type="definition" value="#{contacts.addresses}">
+                        <h:outputText  value="#{city.city}" />
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="Land">
+                    <p:dataList id="country" var="country" type="definition" value="#{contacts.addresses}">
+                    <h:outputText value="#{country.country.countryName}"/>
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="Communications" >
+                    <p:dataList value="#{contacts.communications}" type="definition" var="communications">
+                        <h:outputText value="#{communications.type}: "/> <h:outputText value="#{communications.identifier}"/>
+                    </p:dataList>
+                </p:column>
+            </p:dataTable>
+        </body>
+    </h:form>
+</html>

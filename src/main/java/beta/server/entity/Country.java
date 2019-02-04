@@ -16,6 +16,7 @@
  */
 package beta.server.entity;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -23,7 +24,7 @@ import java.util.*;
  *
  * @author oliver.guenther
  */
-public enum Country {
+public enum Country implements Serializable {
 
     GERMANY("Deutschland", "DE"), AUSTRIA("Östreich", "AT");
 
@@ -32,6 +33,7 @@ public enum Country {
     private final String isoCode;
 
     public String getCountryName() {
+        System.out.println(countryName);
         return countryName;
     }
 

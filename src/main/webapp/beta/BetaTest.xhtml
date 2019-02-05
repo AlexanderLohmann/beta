@@ -9,11 +9,10 @@
     </head>
     <h:form id="Form">
         <body>
-            <h1>Huhu</h1>
             <p:commandButton value="Fill List" actionListener="#{contactController.betaMethod()}" update="Form" process="@this"/>
             <p:dataTable id="Contacts" var="contacts" value="#{contactController.contact}">
                 <f:facet name="header">
-                    Kontakte
+                    <h1>Kontakte</h1>
                 </f:facet>
                 <p:column headerText="Titel">
                     <h:outputText value="#{contacts.title}"/>

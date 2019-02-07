@@ -14,6 +14,41 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
-        <h1>Text Incoming </h1>
+        <h1>Kontakte </h1>
+        <h:form id="dialog">
+            <p:commandButton value="Kontakt Hinzufügen" type="button" onclick="PF('contacts').show();" />
+            <p:dialog header="Kontakt Hinzufügen" widgetVar="contacts" modal="true" height="300">
+                <h:outputText value="Titel: "/> <h:inputText  value="#{dialogController.title}"> <p:ajax event="keyup"/> </h:inputText> <h:outputText value="Vorname: "/> <h:inputText  value="#{dialogController.firstName}"> <p:ajax event="keyup"/> </h:inputText> <h:outputText value=" Nachname: "/> <h:inputText value="#{dialogController.lastName}">  <p:ajax event="keyup"/> </h:inputText> <br/> <br/>
+                <p:outputLabel for="sex" value="Geschlecht:" />
+                <p:selectOneMenu id="sex" value="#{dialogController.sex}" style="width:125px">
+                    <f:selectItem itemLabel="Bitte Auswählen" itemValue="" />
+                    <f:selectItem itemLabel="Männlich" itemValue="male" />
+                    <f:selectItem itemLabel="Weiblich" itemValue="female"/>
+                </p:selectOneMenu > <br/><br/>
+                <p:commandButton value="Speichern"  oncomplete="PF('contacts').hide();" action="#{dialogController.createNewContact()}"/> <p:commandButton value="Abbrechen" oncomplete="PF('contacts').hide();" />
+            </p:dialog>
+            <br/> <br/>
+            <p:commandButton value="Kontakte Anzeigen" update="table"/>
+        </h:form>
+        <h:form id="table">
+            <p:dataTable var="contact" value="#{dialogController.contacts}" id="contact">
+                <f:facet name="header">
+                    <h1>Kontakte</h1>
+                </f:facet>
+                <p:column headerText="Titel">
+                    <h:outputText value="#{contact.title}"/>
+                </p:column>
+                <p:column headerText="Vorname">
+                    <h:outputText value="#{contact.firstName}"/>
+                </p:column>
+                <p:column headerText="Nachname">
+                    <h:outputText value="#{contact.lastName}"/>
+                </p:column>
+                <p:column headerText="Geschlecht">
+                    <h:outputText value="#{contact.sex}"/>
+                </p:column>
+
+            </p:dataTable> 
+        </h:form>
     </h:body>
 </html>

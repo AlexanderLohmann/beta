@@ -18,20 +18,58 @@ and open the template in the editor.
         <h:form id="dialog">
             <p:commandButton value="Kontakt Hinzufügen" type="button" onclick="PF('contacts').show();" />
             <p:dialog header="Kontakt Hinzufügen" widgetVar="contacts" modal="true" height="300">
-                <h:outputText value="Titel: "/> <h:inputText  value="#{dialogController.title}"> <p:ajax event="keyup"/> </h:inputText> <h:outputText value="Vorname: "/> <h:inputText  value="#{dialogController.firstName}"> <p:ajax event="keyup"/> </h:inputText> <h:outputText value=" Nachname: "/> <h:inputText value="#{dialogController.lastName}">  <p:ajax event="keyup"/> </h:inputText> <br/> <br/>
+                <h:outputText value="Titel: "/> <h:inputText  value="#{dialogController.title}"> <p:ajax event="keyup"/> </h:inputText> 
+                <h:outputText value="Vorname: "/> <h:inputText  value="#{dialogController.firstName}"> <p:ajax event="keyup"/> </h:inputText>
+                <h:outputText value=" Nachname: "/> <h:inputText value="#{dialogController.lastName}">  <p:ajax event="keyup"/> </h:inputText> 
+                <br/> <br/>
                 <p:outputLabel for="sex" value="Geschlecht:" />
                 <p:selectOneMenu id="sex" value="#{dialogController.sex}" style="width:125px">
                     <f:selectItem itemLabel="Bitte Auswählen" itemValue="" />
-                    <f:selectItem itemLabel="Männlich" itemValue="male" />
-                    <f:selectItem itemLabel="Weiblich" itemValue="female"/>
-                </p:selectOneMenu > <br/><br/>
-                <p:commandButton value="Speichern"  oncomplete="PF('contacts').hide();" action="#{dialogController.createNewContact()}"/> <p:commandButton value="Abbrechen" oncomplete="PF('contacts').hide();" />
+                    <f:selectItem itemLabel="Männlich" itemValue="Male" />
+                    <f:selectItem itemLabel="Weiblich" itemValue="Female"/>
+                </p:selectOneMenu>
+                <h:outputText value=" Optional: "/> <p:commandButton value="Adresse Hinzufügen" type="button" onclick="PF('address').show();" /> 
+                <p:commandButton value="Kommunikation Hinzufügen" type="button" onclick="PF('communication').show();" />
+                <br/>
+                <p:commandButton value="Speichern" update="dialog"  oncomplete="PF('contacts').hide();" action="#{dialogController.createNewContact()}"/> 
+                <p:commandButton value="Abbrechen" update="dialog" oncomplete="PF('contacts').hide();" />
             </p:dialog>
-            <br/> <br/>
-            <p:commandButton value="Kontakte Anzeigen" update="table"/>
+            <br/>
+            <h:outputText value="#{dialogController.violationMessage}"/>
         </h:form>
+        <h:form id="address">
+            <p:dialog header="Adresse Hinzufügen" widgetVar="address" modal="true" height="300">
+                <h:outputText value="Straße "/> <h:inputText  value="#{dialogController.street}"> <p:ajax event="keyup"/> </h:inputText> 
+                <h:outputText value="Postleitzahl "/> <h:inputText  value="#{dialogController.zipCode}"> <p:ajax event="keyup"/> </h:inputText>
+                <h:outputText value="Stadt "/> <h:inputText value="#{dialogController.city}">  <p:ajax event="keyup"/> </h:inputText> <br/> <br/> 
+                <p:commandButton value="Speichern" update="address"  oncomplete="PF('address').hide();" action="#{dialogController.createNewAddress()}"/> 
+                <p:commandButton value="Abbrechen" update="address" oncomplete="PF('address').hide();" />
+            </p:dialog>
+        </h:form>
+
+        <p:dialog header="Kommunikation Hinzufügen" widgetVar="communication" modal="true" height="300">
+            <h:form id="communication">
+                <p:selectOneMenu id="type"  value="#{dialogController.type}" style="width:125px">
+                    <f:selectItem itemLabel="Bitte Auswählen" itemValue=""  />
+                    <f:selectItem itemLabel="Telefon" itemValue="Phone" />
+                    <f:selectItem itemLabel="Handy" itemValue="Mobile"/>
+                    <f:selectItem itemLabel="Fax" itemValue="Fax" />
+                    <f:selectItem itemLabel="ICQ" itemValue="ICQ"/>
+                    <f:selectItem itemLabel="Email" itemValue="Email" />
+                    <f:selectItem itemLabel="Facebook" itemValue="Facebook"/>
+                </p:selectOneMenu >
+                <p:commandButton  update="communication" action="#{dialogController.setsMask()}" value="Bitte Bestätigen" process="@this,type" /> <br/> <br/>
+                <p:inputText value="#{dialogController.identifier}"> <f:validateRegex pattern="#{dialogController.mask}"/> </p:inputText> <br/> <br/>
+                <p:commandButton value="Speichern" update="communication"  oncomplete="if(args &amp;&amp; !args.validationFailed) PF('communication').hide();" action="#{dialogController.createNewCommunication()}"/> 
+                <p:commandButton value="Abbrechen" update="communication" oncomplete="PF('communication').hide();" />
+            </h:form>
+        </p:dialog>
+
+        <br/>
+        <p:commandButton value="Kontakte Anzeigen" update="table"/>
+
         <h:form id="table">
-            <p:dataTable var="contact" value="#{dialogController.contacts}" id="contact">
+            <p:dataTable var="contact" value="#{dialogController.contacts}" id="contact" emptyMessage="Leer">
                 <f:facet name="header">
                     <h1>Kontakte</h1>
                 </f:facet>
@@ -46,6 +84,32 @@ and open the template in the editor.
                 </p:column>
                 <p:column headerText="Geschlecht">
                     <h:outputText value="#{contact.sex}"/>
+                </p:column>
+                <p:column headerText="Anschrift">
+                    <p:dataList id="adresses" var="adress" type="definition" value="#{contact.addresses}" emptyMessage="Nicht Eingetragen">
+                        <h:outputText value="#{adress.street}"/>
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="Postleitzahl">
+                    <p:dataList id="zipcode" var="zipcode" type="definition" value="#{contact.addresses}" emptyMessage="Nicht Eingetragen">
+                        <h:outputText  value="#{zipcode.zipCode}" />
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="Stadt">
+                    <p:dataList id="city" var="city" type="definition" value="#{contact.addresses}" emptyMessage="Nicht Eingetragen">
+                        <h:outputText  value="#{city.city}" />
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="Land">
+                    <p:dataList id="country" var="country" type="definition" value="#{contact.addresses}" emptyMessage="Nicht Eingetragen">
+                        <h:outputText value="#{country.country.countryName}"/>
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="Communications" >
+                    <p:dataList value="#{contact.communications}" type="definition" var="communications" emptyMessage="Nicht Eingetragen">
+                        <h:outputText value="#{communications.type}: "/> 
+                        <h:outputText value="#{communications.identifier}"/>
+                    </p:dataList>
                 </p:column>
 
             </p:dataTable> 

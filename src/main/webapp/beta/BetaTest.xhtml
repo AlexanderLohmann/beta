@@ -25,7 +25,6 @@
                 </p:column>
                 <p:column headerText="Geschlecht">
                     <h:outputText value="#{contacts.sex}"/>
-
                 </p:column>
                 <p:column headerText="Anschrift">
                     <p:dataList id="adresses" var="adress" type="definition" value="#{contacts.addresses}" >
@@ -44,7 +43,7 @@
                 </p:column>
                 <p:column headerText="Land">
                     <p:dataList id="country" var="country" type="definition" value="#{contacts.addresses}">
-                    <h:outputText value="#{country.country.countryName}"/>
+                        <h:outputText value="#{country.country.countryName}"/>
                     </p:dataList>
                 </p:column>
                 <p:column headerText="Communications" >

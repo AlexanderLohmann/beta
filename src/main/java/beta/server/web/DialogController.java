@@ -11,8 +11,6 @@ import beta.server.entity.Contact;
 import beta.server.entity.Sex;
 import java.io.Serializable;
 import java.util.ArrayList;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -23,6 +21,7 @@ import javax.inject.Named;
 @Named
 @ViewScoped
 public class DialogController implements Serializable {
+
     /**
      * String to use for violation Message.
      */
@@ -206,7 +205,8 @@ public class DialogController implements Serializable {
     }
 
     /**
-     * Sets the input to an communication.
+     * Sets the chosen Communication type to the current communication. When the
+     * input is valid it saves the Communication in an List.
      */
     public void createNewCommunication() {
         Communication communication = new Communication();
@@ -232,9 +232,10 @@ public class DialogController implements Serializable {
     }
 
     /**
-     * Sets the Mask to use for input Pattern.
+     * Sets the Mask to use for input Pattern and the violation Message for that
+     * pattern.
      */
-    public void setsMask() {
+    public void setsMaskAndVioMessage() {
         if ("Phone".equals(type)) {
             mask = Communication.PHONE_PATTERN;
             violateMessage = "Bitte mit folgendem Muster Eingeben : +Ländervorwahl Vorwahl Nummer ,Beispiel: +49 40 898989";

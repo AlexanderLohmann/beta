@@ -283,6 +283,7 @@ public class DialogController implements Serializable {
         } else {
             sexs = null;
         }
+        contact.setTitle(title);
         contact.setSex(sexs);
         contact.setFirstName(firstName);
         contact.setLastName(lastName);

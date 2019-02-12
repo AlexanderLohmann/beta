@@ -49,8 +49,8 @@ and open the template in the editor.
 
         <p:dialog header="Kommunikation Hinzufügen" widgetVar="communication" modal="true" height="300">
             <h:form id="communication">
-                <p:selectOneMenu id="type"  value="#{dialogController.type}" style="width:125px">
-                    <f:selectItem itemLabel="Bitte Auswählen" itemValue=""  />
+                <p:selectOneMenu id="type"  value="#{dialogController.type}" style="width:125px" onchange="#{dialogController.setsMask()}">
+                    <f:selectItem itemLabel="Bitte Auswählen"  itemValue="#{null}"/>
                     <f:selectItem itemLabel="Telefon" itemValue="Phone" />
                     <f:selectItem itemLabel="Handy" itemValue="Mobile"/>
                     <f:selectItem itemLabel="Fax" itemValue="Fax" />
@@ -59,8 +59,11 @@ and open the template in the editor.
                     <f:selectItem itemLabel="Facebook" itemValue="Facebook"/>
                 </p:selectOneMenu >
                 <p:commandButton  update="communication" action="#{dialogController.setsMask()}" value="Bitte Bestätigen" process="@this,type" /> <br/> <br/>
-                <p:inputText value="#{dialogController.identifier}"> <f:validateRegex pattern="#{dialogController.mask}"/> </p:inputText> <br/> <br/>
-                <p:commandButton value="Speichern" update="communication"  oncomplete="if(args &amp;&amp; !args.validationFailed) PF('communication').hide();" action="#{dialogController.createNewCommunication()}"/> 
+                <p:inputText id="cominput" value="#{dialogController.identifier}" validatorMessage="#{dialogController.violateMessage}"> <f:validateRegex pattern="#{dialogController.mask}" />  </p:inputText> <br/> <br/>
+                <p:message for="cominput" display="text"/>
+                <p:commandButton id="save" value="Speichern" update="@form" oncomplete="if(args &amp;&amp; !args.validationFailed) PF('communication').hide();" action="#{dialogController.createNewCommunication()}"/>  
+               
+               
                 <p:commandButton value="Abbrechen" update="communication" oncomplete="PF('communication').hide();" />
             </h:form>
         </p:dialog>

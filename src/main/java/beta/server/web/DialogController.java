@@ -11,6 +11,8 @@ import beta.server.entity.Contact;
 import beta.server.entity.Sex;
 import java.io.Serializable;
 import java.util.ArrayList;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -22,6 +24,7 @@ import javax.inject.Named;
 @ViewScoped
 public class DialogController implements Serializable {
 
+    private String violateMessage = "Bitte zuerst eine Kommunikationsart auswählen";
     /**
      * String to use for Pattern.
      */
@@ -95,6 +98,10 @@ public class DialogController implements Serializable {
     private ArrayList<Contact> contacts = new ArrayList<>();
 
     // Getter
+    public String getViolateMessage() {
+        return violateMessage;
+    }
+
     public String getMask() {
         return mask;
     }
@@ -220,20 +227,31 @@ public class DialogController implements Serializable {
         communications.add(communication);
         System.out.println(communication.getIdentifier() + communication.getType());
     }
+
     /**
      * Sets the Mask to use for input Pattern.
      */
-    public void setsMask() {  
+    public void setsMask() {
         if ("Phone".equals(type)) {
             mask = Communication.PHONE_PATTERN;
+            violateMessage = "Bitte mit folgendem Muster Eingeben : +Ländervorwahl Vorwahl Nummer ,Beispiel: +49 40 898989";
         } else if ("Mobile".equals(type)) {
             mask = Communication.PHONE_PATTERN;
+            violateMessage = "Bitte mit folgendem Muster Eingeben : +Ländervorwahl Vorwahl Nummer ,Beispiel: +49 40 898989";
         } else if ("Fax".equals(type)) {
             mask = Communication.PHONE_PATTERN;
+            violateMessage = "Bitte mit folgendem Muster Eingeben : +Ländervorwahl Vorwahl Nummer ,Beispiel: +49 40 898989";
         } else if ("Email".equals(type)) {
             mask = Communication.EMAIL_PATTERN;
+            violateMessage = "Bitte mit folgendem Muster Eingeben : beispiel@beispiel.beispiel";
+        } else if ("ICQ".equals(type)) {
+            mask = "^(?=.*\\d).+$";
+            violateMessage = "Bitte eine Gültige Nummer eingeben.";
+        } else if ("Facebook".equals(type)) {
+            mask = "[A-Za-z0-9]{1,999}";
+            violateMessage = "Bitte gültigen Benutzernamen oder Email eingeben.";
         } else {
-            mask = "";
+            violateMessage = "Bitte zuerst eine Kommunikationsart auswählen";
         }
         System.out.println(mask);
     }
@@ -272,9 +290,12 @@ public class DialogController implements Serializable {
         }
         if (contact.getViolationMessage() == null) {
             contacts.add(contact);
-        }
+            contact = new Contact();
+            communications = new ArrayList();
+            addresses = new ArrayList();
+        } else {
         violationMessage = contact.getViolationMessage();
-        communications = new ArrayList();
-        addresses = new ArrayList();
+        }
+
     }
 }

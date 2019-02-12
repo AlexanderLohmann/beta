@@ -23,7 +23,9 @@ import javax.inject.Named;
 @Named
 @ViewScoped
 public class DialogController implements Serializable {
-
+    /**
+     * String to use for violation Message.
+     */
     private String violateMessage = "Bitte zuerst eine Kommunikationsart auswählen";
     /**
      * String to use for Pattern.
@@ -221,6 +223,7 @@ public class DialogController implements Serializable {
         } else if ("Facebook".equals(type)) {
             communication.setType(Communication.Type.FACEBOOK);
         } else {
+            type = new String();
             communication.setType(null);
         }
         communication.setIdentifier(identifier);
@@ -294,7 +297,7 @@ public class DialogController implements Serializable {
             communications = new ArrayList();
             addresses = new ArrayList();
         } else {
-        violationMessage = contact.getViolationMessage();
+            violationMessage = contact.getViolationMessage();
         }
 
     }

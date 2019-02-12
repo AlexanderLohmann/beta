@@ -12,8 +12,10 @@ import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
 /**
  * Controller for the Table List.
+ *
  * @author alexander.lohmann
  */
 @Named
@@ -29,20 +31,21 @@ public class ContactController implements Serializable {
      * Lists of contacts for output on the website.
      */
     private List<Contact> contact;
-    
-    
+
     /**
      * return list containing Contacts.
-     * @return list containing Contacts 
+     *
+     * @return list containing Contacts
      */
     public List<Contact> getContact() {
         return contact;
     }
+
     /**
      * Fills contacts.
      */
-    public void betaMethod(){
-    List<Contact> contacts = contactEao.findAll();
-    contact = contacts;
+    public void betaMethod() {
+        List<Contact> contacts = contactEao.findAll();
+        contact = contacts;
     }
 }

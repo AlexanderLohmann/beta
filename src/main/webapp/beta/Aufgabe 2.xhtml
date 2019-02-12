@@ -62,8 +62,6 @@ and open the template in the editor.
                 <p:inputText id="cominput" value="#{dialogController.identifier}" validatorMessage="#{dialogController.violateMessage}"> <f:validateRegex pattern="#{dialogController.mask}" />  </p:inputText> <br/> <br/>
                 <p:message for="cominput" display="text"/>
                 <p:commandButton id="save" value="Speichern" update="@form" oncomplete="if(args &amp;&amp; !args.validationFailed) PF('communication').hide();" action="#{dialogController.createNewCommunication()}"/>  
-               
-               
                 <p:commandButton value="Abbrechen" update="communication" oncomplete="PF('communication').hide();" />
             </h:form>
         </p:dialog>

@@ -7,14 +7,19 @@ package beta.server.web;
 
 import beta.server.entity.Address;
 import beta.server.entity.Communication;
+import beta.server.entity.Communication.Type;
 import beta.server.entity.Contact;
 import beta.server.entity.Sex;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 /**
+ * Controller for the Aufgabe 2 website checks if the Contact is valid, saves it
+ * in a List.
  *
  * @author alexander.lohmann
  */
@@ -30,21 +35,11 @@ public class DialogController implements Serializable {
      * String to use for Pattern.
      */
     private String mask;
-
     /**
-     * String to use for Communication type input.
+     * String with the violationMessage to ouput on Website if Contact is not
+     * valid.
      */
-    private String type;
-
-    /**
-     * String to use ofr Communication identifier input.
-     */
-    private String identifier;
-
-    /**
-     * String to use for Title input.
-     */
-    private String title;
+    private String violationMessage;
     /**
      * Contact to save in ContactList after inputs.
      */
@@ -53,37 +48,10 @@ public class DialogController implements Serializable {
      * Adress to save into adresslist after inputs.
      */
     private Address address = new Address();
-
     /**
-     * String to use for First Name input.
+     * Communication to save into communicationlist after inputs.
      */
-    private String firstName;
-    /**
-     * String to use for Last Name input.
-     */
-    private String lastName;
-    /**
-     * String to use for sex input setup.
-     */
-    private String sex = "";
-    /**
-     * String with the violationMessage to ouput on Website if Contact is not
-     * valid.
-     */
-    private String violationMessage;
-    /**
-     * String to use for street input.
-     */
-    private String street;
-
-    /**
-     * String to use for city input.
-     */
-    private String city;
-    /**
-     * String to use for zipCode input.
-     */
-    private String zipCode;
+    private Communication communication = new Communication();
     /**
      * List to save inputed Communication in to use later for an new Contact.
      */
@@ -92,11 +60,18 @@ public class DialogController implements Serializable {
      * List to save inputed Adress in to use later for an new Contact.
      */
     private ArrayList<Address> addresses = new ArrayList<>();
-
     /**
      * ArrayList to store new Contacts in.
      */
     private ArrayList<Contact> contacts = new ArrayList<>();
+    /**
+     * ArrayList containing the Strings for the selectoneMenu of Type.
+     */
+    private List<String> types = new ArrayList<>();
+    /**
+     * ArrayList containing the Strings for the selectoneMenu of Sex.
+     */
+    private List<String> sexs = new ArrayList<>();
 
     // Getter
     public String getViolateMessage() {
@@ -107,34 +82,6 @@ public class DialogController implements Serializable {
         return mask;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public ArrayList<Contact> getContacts() {
-        return contacts;
-    }
-
     public String getViolationMessage() {
         return violationMessage;
     }
@@ -143,41 +90,29 @@ public class DialogController implements Serializable {
         return contact;
     }
 
-    public String getStreet() {
-        return street;
+    public Address getAddress() {
+        return address;
     }
 
-    public String getCity() {
-        return city;
+    public Communication getCommunication() {
+        return communication;
     }
 
-    public String getZipCode() {
-        return zipCode;
+    public ArrayList<Contact> getContacts() {
+        return contacts;
+    }
+
+    public List<String> getTypes() {
+        return types;
+    }
+
+    public List<String> getSexs() {
+        return sexs;
     }
 
     //Setter
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setViolationMessage(String violationMessage) {
+        this.violationMessage = violationMessage;
     }
 
     public void setContact(Contact contact) {
@@ -188,20 +123,17 @@ public class DialogController implements Serializable {
         this.address = address;
     }
 
-    public void setViolationMessage(String violationMessage) {
-        this.violationMessage = violationMessage;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    /**
+     * Fills the communications and Sexs lists.
+     */
+    @PostConstruct
+    private void filldata() {
+        for (Type typea : Communication.Type.values()) {
+            types.add(typea.name());
+        }
+        for (Sex sexa : Sex.values()) {
+            sexs.add(sexa.name());
+        }
     }
 
     /**
@@ -209,26 +141,8 @@ public class DialogController implements Serializable {
      * input is valid it saves the Communication in an List.
      */
     public void createNewCommunication() {
-        Communication communication = new Communication();
-        if ("Phone".equals(type)) {
-            communication.setType(Communication.Type.PHONE);
-        } else if ("Mobile".equals(type)) {
-            communication.setType(Communication.Type.MOBILE);
-        } else if ("Fax".equals(type)) {
-            communication.setType(Communication.Type.FAX);
-        } else if ("ICQ".equals(type)) {
-            communication.setType(Communication.Type.ICQ);
-        } else if ("Email".equals(type)) {
-            communication.setType(Communication.Type.EMAIL);
-        } else if ("Facebook".equals(type)) {
-            communication.setType(Communication.Type.FACEBOOK);
-        } else {
-            type = new String();
-            communication.setType(null);
-        }
-        communication.setIdentifier(identifier);
         communications.add(communication);
-        System.out.println(communication.getIdentifier() + communication.getType());
+        communication = new Communication();
     }
 
     /**
@@ -236,38 +150,40 @@ public class DialogController implements Serializable {
      * pattern.
      */
     public void setsMaskAndVioMessage() {
-        if ("Phone".equals(type)) {
-            mask = Communication.PHONE_PATTERN;
-            violateMessage = "Bitte mit folgendem Muster Eingeben : +Ländervorwahl Vorwahl Nummer ,Beispiel: +49 40 898989";
-        } else if ("Mobile".equals(type)) {
-            mask = Communication.PHONE_PATTERN;
-            violateMessage = "Bitte mit folgendem Muster Eingeben : +Ländervorwahl Vorwahl Nummer ,Beispiel: +49 40 898989";
-        } else if ("Fax".equals(type)) {
-            mask = Communication.PHONE_PATTERN;
-            violateMessage = "Bitte mit folgendem Muster Eingeben : +Ländervorwahl Vorwahl Nummer ,Beispiel: +49 40 898989";
-        } else if ("Email".equals(type)) {
-            mask = Communication.EMAIL_PATTERN;
-            violateMessage = "Bitte mit folgendem Muster Eingeben : beispiel@beispiel.beispiel";
-        } else if ("ICQ".equals(type)) {
-            mask = "^(?=.*\\d).+$";
-            violateMessage = "Bitte eine Gültige Nummer eingeben.";
-        } else if ("Facebook".equals(type)) {
-            mask = "[A-Za-z0-9]{1,999}";
-            violateMessage = "Bitte gültigen Benutzernamen oder Email eingeben.";
-        } else {
-            violateMessage = "Bitte zuerst eine Kommunikationsart auswählen";
+        if (communication.getType() != null) {
+            if ("PHONE".equals(communication.getType().name())) {
+                mask = Communication.PHONE_PATTERN;
+                violateMessage = "Bitte mit folgendem Muster Eingeben : +Ländervorwahl Vorwahl Nummer ,Beispiel: +49 40 898989";
+            } else if ("MOBILE".equals(communication.getType().name())) {
+                mask = Communication.PHONE_PATTERN;
+                violateMessage = "Bitte mit folgendem Muster Eingeben : +Ländervorwahl Vorwahl Nummer ,Beispiel: +49 40 898989";
+            } else if ("FAX".equals(communication.getType().name())) {
+                mask = Communication.PHONE_PATTERN;
+                violateMessage = "Bitte mit folgendem Muster Eingeben : +Ländervorwahl Vorwahl Nummer ,Beispiel: +49 40 898989";
+            } else if ("EMAIL".equals(communication.getType().name())) {
+                mask = Communication.EMAIL_PATTERN;
+                violateMessage = "Bitte mit folgendem Muster Eingeben : beispiel@beispiel.beispiel";
+            } else if ("ICQ".equals(communication.getType().name())) {
+                mask = "^(?=.*\\d).+$";
+                violateMessage = "Bitte eine Gültige Nummer eingeben.";
+            } else if ("FACEBOOK".equals(communication.getType().name())) {
+                mask = "[A-Za-z0-9]{1,999}";
+                violateMessage = "Bitte gültigen Benutzernamen oder Email eingeben.";
+            } else if ("SKYPE".equals(communication.getType().name())) {
+                mask = "[A-Za-z0-9]{1,999}";
+                violateMessage = "Bitte gültigen Benutzernamen oder Email eingeben.";
+            } else {
+                violateMessage = "Bitte zuerst eine Kommunikationsart auswählen";
+            }
         }
-        System.out.println(mask);
     }
 
     /**
      * Sets the inputs to an address.
      */
     public void createNewAddress() {
-        address.setStreet(street);
-        address.setCity(city);
-        address.setZipCode(zipCode);
         addresses.add(address);
+        address = new Address();
     }
 
     /**
@@ -275,18 +191,13 @@ public class DialogController implements Serializable {
      * violationMessage and holds it in contacts ArrayList.
      */
     public void createNewContact() {
-        Sex sexs;
-        if ("Female".equals(sex)) {
-            sexs = Sex.FEMALE;
-        } else if ("Male".equals(sex)) {
-            sexs = Sex.MALE;
+        if ("FEMALE".equals(contact.getSex().FEMALE.name())) {
+            contact.setSex(Sex.FEMALE);
+        } else if ("MALE".equals(contact.getSex().MALE.name())) {
+            contact.setSex(Sex.MALE);
         } else {
-            sexs = null;
+            contact.setSex(null);
         }
-        contact.setTitle(title);
-        contact.setSex(sexs);
-        contact.setFirstName(firstName);
-        contact.setLastName(lastName);
         for (Address addresse : addresses) {
             contact.getAddresses().add(addresse);
         }
@@ -301,6 +212,5 @@ public class DialogController implements Serializable {
         } else {
             violationMessage = contact.getViolationMessage();
         }
-
     }
 }

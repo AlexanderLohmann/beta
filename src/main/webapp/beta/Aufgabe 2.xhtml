@@ -18,15 +18,14 @@ and open the template in the editor.
         <h:form id="dialog">
             <p:commandButton value="Kontakt Hinzufügen" type="button" onclick="PF('contacts').show();" />
             <p:dialog header="Kontakt Hinzufügen" widgetVar="contacts" modal="true" height="300">
-                <h:outputText value="Titel: "/> <h:inputText  value="#{dialogController.title}"> <p:ajax event="keyup"/> </h:inputText> 
-                <h:outputText value="Vorname: "/> <h:inputText  value="#{dialogController.firstName}"> <p:ajax event="keyup"/> </h:inputText>
-                <h:outputText value=" Nachname: "/> <h:inputText value="#{dialogController.lastName}">  <p:ajax event="keyup"/> </h:inputText> 
+                <h:outputText value="Titel: "/> <h:inputText  value="#{dialogController.contact.title}"/>
+                <h:outputText value="Vorname: "/> <h:inputText  value="#{dialogController.contact.firstName}"/>
+                <h:outputText value=" Nachname: "/> <h:inputText value="#{dialogController.contact.lastName}"/>
                 <br/> <br/>
                 <p:outputLabel for="sex" value="Geschlecht:" />
-                <p:selectOneMenu id="sex" value="#{dialogController.sex}" style="width:125px">
+                <p:selectOneMenu id="sex" value="#{dialogController.contact.sex}" style="width:125px">
                     <f:selectItem itemLabel="Bitte Auswählen" itemValue="" />
-                    <f:selectItem itemLabel="Männlich" itemValue="Male" />
-                    <f:selectItem itemLabel="Weiblich" itemValue="Female"/>
+                    <f:selectItems value="#{dialogController.sexs}" />
                 </p:selectOneMenu>
                 <h:outputText value=" Optional: "/> <p:commandButton value="Adresse Hinzufügen" type="button" onclick="PF('address').show();" /> 
                 <p:commandButton value="Kommunikation Hinzufügen" type="button" onclick="PF('communication').show();" />
@@ -39,37 +38,29 @@ and open the template in the editor.
         </h:form>
         <h:form id="address">
             <p:dialog header="Adresse Hinzufügen" widgetVar="address" modal="true" height="300">
-                <h:outputText value="Straße "/> <h:inputText  value="#{dialogController.street}"> <p:ajax event="keyup"/> </h:inputText> 
-                <h:outputText value="Postleitzahl "/> <h:inputText  value="#{dialogController.zipCode}"> <p:ajax event="keyup"/> </h:inputText>
-                <h:outputText value="Stadt "/> <h:inputText value="#{dialogController.city}">  <p:ajax event="keyup"/> </h:inputText> <br/> <br/> 
+                <h:outputText value="Straße "/> <h:inputText  value="#{dialogController.address.street}"> <p:ajax event="keyup"/> </h:inputText> 
+                <h:outputText value="Postleitzahl "/> <h:inputText  value="#{dialogController.address.zipCode}"> <p:ajax event="keyup"/> </h:inputText>
+                <h:outputText value="Stadt "/> <h:inputText value="#{dialogController.address.city}">  <p:ajax event="keyup"/> </h:inputText> <br/> <br/> 
                 <p:commandButton value="Speichern" update="address"  oncomplete="PF('address').hide();" action="#{dialogController.createNewAddress()}"/> 
                 <p:commandButton value="Abbrechen" update="address" oncomplete="PF('address').hide();" />
             </p:dialog>
         </h:form>
-
         <p:dialog header="Kommunikation Hinzufügen" widgetVar="communication" modal="true" height="300">
             <h:form id="communication">
-                <p:selectOneMenu id="type"  value="#{dialogController.type}" style="width:125px" onchange="#{dialogController.setsMaskAndVioMessage()}">
+                <p:selectOneMenu id="type"  value="#{dialogController.communication.type}" style="width:125px" onchange="#{dialogController.setsMaskAndVioMessage()}">
                     <f:selectItem itemLabel="Bitte Auswählen"  itemValue="#{null}"/>
-                    <f:selectItem itemLabel="Telefon" itemValue="Phone" />
-                    <f:selectItem itemLabel="Handy" itemValue="Mobile"/>
-                    <f:selectItem itemLabel="Fax" itemValue="Fax" />
-                    <f:selectItem itemLabel="ICQ" itemValue="ICQ"/>
-                    <f:selectItem itemLabel="Email" itemValue="Email" />
-                    <f:selectItem itemLabel="Facebook" itemValue="Facebook"/>
+                    <f:selectItems value="#{dialogController.types}" />
                     <p:ajax event="valueChange" listener="#{dialogController.setsMaskAndVioMessage()}"/>
                 </p:selectOneMenu >
                 <br/> <br/>
-                <p:inputText id="cominput" value="#{dialogController.identifier}" validatorMessage="#{dialogController.violateMessage}"> <f:validateRegex pattern="#{dialogController.mask}" />  </p:inputText> <br/> <br/>
+                <p:inputText id="cominput" value="#{dialogController.communication.identifier}" validatorMessage="#{dialogController.violateMessage}"> <f:validateRegex pattern="#{dialogController.mask}" />  </p:inputText> <br/> <br/>
                 <p:message for="cominput" display="text"/>
-                <p:commandButton id="save" value="Speichern" update="@form" oncomplete="if(args &amp;&amp; !args.validationFailed) PF('communication').hide();" action="#{dialogController.createNewCommunication()}"/>  
+                <p:commandButton id="save" value="Speichern" update="communication" oncomplete="if(args &amp;&amp; !args.validationFailed) PF('communication').hide();" action="#{dialogController.createNewCommunication()}"/>  
                 <p:commandButton value="Abbrechen" update="communication" oncomplete="PF('communication').hide();" />
             </h:form>
         </p:dialog>
-
         <br/>
         <p:commandButton value="Kontakte Anzeigen" update="table"/>
-
         <h:form id="table">
             <p:dataTable var="contact" value="#{dialogController.contacts}" id="contact" emptyMessage="Leer">
                 <f:facet name="header">
@@ -113,7 +104,6 @@ and open the template in the editor.
                         <h:outputText value="#{communications.identifier}"/>
                     </p:dataList>
                 </p:column>
-
             </p:dataTable> 
         </h:form>
     </h:body>

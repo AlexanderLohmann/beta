@@ -57,8 +57,9 @@ and open the template in the editor.
                     <f:selectItem itemLabel="ICQ" itemValue="ICQ"/>
                     <f:selectItem itemLabel="Email" itemValue="Email" />
                     <f:selectItem itemLabel="Facebook" itemValue="Facebook"/>
+                    <p:ajax event="valueChange" listener="#{dialogController.setsMaskAndVioMessage()}"/>
                 </p:selectOneMenu >
-                <p:commandButton  update="communication" action="#{dialogController.setsMaskAndVioMessage()}" value="Bitte Bestätigen" process="@this,type" /> <br/> <br/>
+                <br/> <br/>
                 <p:inputText id="cominput" value="#{dialogController.identifier}" validatorMessage="#{dialogController.violateMessage}"> <f:validateRegex pattern="#{dialogController.mask}" />  </p:inputText> <br/> <br/>
                 <p:message for="cominput" display="text"/>
                 <p:commandButton id="save" value="Speichern" update="@form" oncomplete="if(args &amp;&amp; !args.validationFailed) PF('communication').hide();" action="#{dialogController.createNewCommunication()}"/>  

@@ -63,15 +63,15 @@ public class DialogController implements Serializable {
     /**
      * ArrayList to store new Contacts in.
      */
-    private ArrayList<Contact> contacts = new ArrayList<>();
+    private final ArrayList<Contact> contacts = new ArrayList<>();
     /**
      * ArrayList containing the Strings for the selectoneMenu of Type.
      */
-    private List<String> types = new ArrayList<>();
+    private final List<String> types = new ArrayList<>();
     /**
      * ArrayList containing the Strings for the selectoneMenu of Sex.
      */
-    private List<String> sexs = new ArrayList<>();
+    private final List<String> sexs = new ArrayList<>();
 
     // Getter
     public String getViolateMessage() {
@@ -108,19 +108,6 @@ public class DialogController implements Serializable {
 
     public List<String> getSexs() {
         return sexs;
-    }
-
-    //Setter
-    public void setViolationMessage(String violationMessage) {
-        this.violationMessage = violationMessage;
-    }
-
-    public void setContact(Contact contact) {
-        this.contact = contact;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     /**

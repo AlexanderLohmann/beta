@@ -30,7 +30,7 @@ and open the template in the editor.
                 <h:outputText value=" Optional: "/> <p:commandButton value="Adresse Hinzufügen" type="button" onclick="PF('address').show();" /> 
                 <p:commandButton value="Kommunikation Hinzufügen" type="button" onclick="PF('communication').show();" />
                 <br/>
-                <p:commandButton value="Speichern" update="dialog"  oncomplete="PF('contacts').hide();" action="#{dialogController.createNewContact()}"/> 
+                <p:commandButton value="Speichern" update="dialog,table"  oncomplete="PF('contacts').hide();" action="#{dialogController.createNewContact()}"/> 
                 <p:commandButton value="Abbrechen" update="dialog" oncomplete="PF('contacts').hide();" />
             </p:dialog>
             <br/>
@@ -60,7 +60,6 @@ and open the template in the editor.
             </h:form>
         </p:dialog>
         <br/>
-        <p:commandButton value="Kontakte Anzeigen" update="table"/>
         <h:form id="table">
             <p:dataTable var="contact" value="#{dialogController.contacts}" id="contact" emptyMessage="Leer">
                 <f:facet name="header">

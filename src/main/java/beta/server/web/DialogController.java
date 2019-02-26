@@ -18,8 +18,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 /**
- * Controller for the Aufgabe 2 website checks if the Contact is valid, saves it
- * in a List.
+ * Controller for the Aufgabe 2 website checks if the Contact is valid then saves it
+ * in a List. For incorrect input it has Violationmessages.
  *
  * @author alexander.lohmann
  */

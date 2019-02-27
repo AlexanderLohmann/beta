@@ -15,53 +15,10 @@ and open the template in the editor.
     </h:head>
     <h:body>
         <h1>Kontakte </h1>
-        <h:form id="dialog">
-            <p:commandButton value="Kontakt Hinzufügen" type="button" onclick="PF('contacts').show();" />
-            <p:dialog header="Kontakt Hinzufügen" widgetVar="contacts" modal="true" height="300">
-                <h:outputText value="Titel: "/> <h:inputText  value="#{dialogController.contact.title}"/>
-                <h:outputText value="Vorname: "/> <h:inputText  value="#{dialogController.contact.firstName}"/>
-                <h:outputText value=" Nachname: "/> <h:inputText value="#{dialogController.contact.lastName}"/>
-                <br/> <br/>
-                <p:outputLabel for="sex" value="Geschlecht:" />
-                <p:selectOneMenu id="sex" value="#{dialogController.contact.sex}" style="width:125px">
-                    <f:selectItem itemLabel="Bitte Auswählen" itemValue="" />
-                    <f:selectItems value="#{dialogController.sexs}" />
-                </p:selectOneMenu>
-                <h:outputText value=" Optional: "/> <p:commandButton value="Adresse Hinzufügen" type="button" onclick="PF('address').show();" /> 
-                <p:commandButton value="Kommunikation Hinzufügen" type="button" onclick="PF('communication').show();" />
-                <br/>
-                <p:commandButton value="Speichern" update="dialog,table"  oncomplete="PF('contacts').hide();" action="#{dialogController.createNewContact()}"/> 
-                <p:commandButton value="Abbrechen" update="dialog" oncomplete="PF('contacts').hide();" />
-            </p:dialog>
-            <br/>
-            <h:outputText value="#{dialogController.violationMessage}"/>
-        </h:form>
-        <h:form id="address">
-            <p:dialog header="Adresse Hinzufügen" widgetVar="address" modal="true" height="300">
-                <h:outputText value="Straße "/> <h:inputText  value="#{dialogController.address.street}"> <p:ajax event="keyup"/> </h:inputText> 
-                <h:outputText value="Postleitzahl "/> <h:inputText  value="#{dialogController.address.zipCode}"> <p:ajax event="keyup"/> </h:inputText>
-                <h:outputText value="Stadt "/> <h:inputText value="#{dialogController.address.city}">  <p:ajax event="keyup"/> </h:inputText> <br/> <br/> 
-                <p:commandButton value="Speichern" update="address"  oncomplete="PF('address').hide();" action="#{dialogController.createNewAddress()}"/> 
-                <p:commandButton value="Abbrechen" update="address" oncomplete="PF('address').hide();" />
-            </p:dialog>
-        </h:form>
-        <p:dialog header="Kommunikation Hinzufügen" widgetVar="communication" modal="true" height="300">
-            <h:form id="communication">
-                <p:selectOneMenu id="type"  value="#{dialogController.communication.type}" style="width:125px" onchange="#{dialogController.setsMaskAndVioMessage()}">
-                    <f:selectItem itemLabel="Bitte Auswählen"  itemValue="#{null}"/>
-                    <f:selectItems value="#{dialogController.types}" />
-                    <p:ajax event="valueChange" listener="#{dialogController.setsMaskAndVioMessage()}"/>
-                </p:selectOneMenu >
-                <br/> <br/>
-                <p:inputText id="cominput" value="#{dialogController.communication.identifier}" validatorMessage="#{dialogController.violateMessage}"> <f:validateRegex pattern="#{dialogController.mask}" />  </p:inputText> <br/> <br/>
-                <p:message for="cominput" display="text"/>
-                <p:commandButton id="save" value="Speichern" update="communication" oncomplete="if(args &amp;&amp; !args.validationFailed) PF('communication').hide();" action="#{dialogController.createNewCommunication()}"/>  
-                <p:commandButton value="Abbrechen" update="communication" oncomplete="PF('communication').hide();" />
-            </h:form>
-        </p:dialog>
+        <p:commandButton value="Kontakt Hinzufügen" type="button" onclick="PF('contacts').show();" />
         <br/>
         <h:form id="table">
-            <p:dataTable var="contact" value="#{dialogController.contacts}" id="contact" emptyMessage="Leer">
+            <p:dataTable var="contact" value="#{DialogController.contacts}" id="contact" emptyMessage="Leer">
                 <f:facet name="header">
                     <h1>Kontakte</h1>
                 </f:facet>
@@ -105,5 +62,68 @@ and open the template in the editor.
                 </p:column>
             </p:dataTable> 
         </h:form>
+        <h:form id="dialog">
+            <p:dialog header="Kontakt Hinzufügen" widgetVar="contacts" modal="true" height="300" width="650">
+                <h:panelGrid columns="2">
+
+                    <h:outputText value="Titel: "/> <h:inputText  value="#{DialogController.contact.title}"/>
+                    <h:outputText value="Vorname: "/> <h:inputText  value="#{DialogController.contact.firstName}"/>
+                    <h:outputText value=" Nachname: "/> <h:inputText value="#{DialogController.contact.lastName}"/>
+                    <p:outputLabel for="sex" value="Geschlecht:" />
+                    <p:selectOneMenu id="sex" value="#{DialogController.contact.sex}" style="width:125px">
+                        <f:selectItem itemLabel="Bitte Auswählen" itemValue="" />
+                        <f:selectItems value="#{DialogController.sexs}" />
+                    </p:selectOneMenu>
+
+
+                    <h:outputText value=" Optional: "/>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Adresse Hinzufügen" type="button" onclick="PF('address').show();" /> 
+                        <p:commandButton value="Kommunikation Hinzufügen" type="button" onclick="PF('communication').show();" />
+                    </h:panelGrid> <br/>
+                    <h:panelGrid columns="2" style="margin-left: 225px">
+                        <p:commandButton value="Speichern" update="dialog,table"
+                                         oncomplete="PF('contacts').hide();" 
+                                         action="#{DialogController.createNewContact()}"/> 
+                        <p:commandButton value="Abbrechen" update="dialog" oncomplete="PF('contacts').hide();" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+            <br/>
+            <h:outputText value="#{DialogController.violationMessage}"/>
+        </h:form>
+        <h:form id="address">
+            <p:dialog header="Adresse Hinzufügen" widgetVar="address" modal="true" height="300">
+                <h:panelGrid columns="2">
+                <h:outputText value="Straße: "/> <h:inputText  value="#{DialogController.address.street}"> <p:ajax event="keyup"/> </h:inputText> 
+                <h:outputText value="Postleitzahl: "/> <h:inputText  value="#{DialogController.address.zipCode}"> <p:ajax event="keyup"/> </h:inputText>
+                <h:outputText value="Stadt: "/> <h:inputText value="#{DialogController.address.city}">  <p:ajax event="keyup"/> </h:inputText></h:panelGrid> 
+                <p:panelGrid columns="2" style="margin-left: 60px" class="ui-panelgrid-blank">
+                    <p:commandButton value="Speichern" update="address"  oncomplete="PF('address').hide();" action="#{DialogController.createNewAddress()}"/> 
+                    <p:commandButton value="Abbrechen" update="address" oncomplete="PF('address').hide();" />
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+        
+            <p:dialog header="Kommunikation Hinzufügen" widgetVar="communication" modal="true" height="150">
+                <h:form id="communication">
+                <p:selectOneMenu id="type"  value="#{DialogController.communication.type}" style="width:125px" onchange="#{DialogController.setsMaskAndVioMessage()}">
+                    <f:selectItem itemLabel="Bitte Auswählen"  itemValue="#{null}"/>
+                    <f:selectItems value="#{DialogController.types}" />
+                    <p:ajax event="valueChange" listener="#{DialogController.setsMaskAndVioMessage()}"/>
+                </p:selectOneMenu >
+                <p:inputText id="cominput" value="#{DialogController.communication.identifier}" validatorMessage="#{DialogController.violateMessage}"> 
+                    <f:validateRegex pattern="#{DialogController.mask}" />  
+                </p:inputText>
+                <p:message for="cominput" display="text"/>
+                <h:panelGrid columns="2" style="margin-left: 130px">
+                    <p:commandButton id="save" value="Speichern" update="communication" 
+                                     oncomplete="if(args &amp;&amp; !args.validationFailed) PF('communication').hide();" 
+                                     action="#{DialogController.createNewCommunication()}"/>  
+                    <p:commandButton value="Abbrechen" update="communication" oncomplete="PF('communication').hide();" />
+                </h:panelGrid>
+                </h:form>
+            </p:dialog>
+        
     </h:body>
 </html>

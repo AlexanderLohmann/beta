@@ -140,7 +140,7 @@ and open the template in the editor.
                 </p:panelGrid>
             </h:form>
             <f:facet name="footer">
-                <h:panelGrid columns="2" class="ui-panelgrid-blank"> 
+                <h:panelGrid columns="2" class="ui-panelgrid-blank" style="float: right;"> 
                     <p:commandButton id="save" value="Speichern" update="communication,dialog" 
                                      oncomplete="if(args &amp;&amp; !args.validationFailed) PF('communication').hide();" 
                                      action="#{CommunicationController.createNewCommunication()}" form="communication" process="communication,@this"/>  

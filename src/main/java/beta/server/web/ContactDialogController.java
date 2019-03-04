@@ -15,33 +15,30 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Controller for the Aufgabe 2 website checks if the Contact is valid then
- * saves it in a List. For incorrect input it has Violationmessages.
+ * Controller to create a new Contact, checks for validation on the Contact
+ * saves it in a List.
  *
  * @author alexander.lohmann
  */
-@Named("DialogController")
+@Named("ContactDialogController")
 @ViewScoped
-public class AufgabeZweiDialogController implements Serializable {
+public class ContactDialogController implements Serializable {
+
+    private final Logger L = LoggerFactory.getLogger(CommunicationDialogController.class);
 
     /**
-     * String with the violationMessage to ouput on Website if Contact is not
-     * valid.
+     * ArrayList to store new Contacts in.
      */
-    private String violationMessage;
+    private final ArrayList<Contact> contacts = new ArrayList<>();
     /**
      * Contact to save in ContactList after inputs.
      */
     private Contact contact = new Contact();
-    /**
-     * Adress to save into adresslist after inputs.
-     */
-    private Address address = new Address();
-
     /**
      * List to save inputed Communication in to use later for an new Contact.
      */
@@ -50,10 +47,7 @@ public class AufgabeZweiDialogController implements Serializable {
      * List to save inputed Adress in to use later for an new Contact.
      */
     private ArrayList<Address> addresses = new ArrayList<>();
-    /**
-     * ArrayList to store new Contacts in.
-     */
-    private final ArrayList<Contact> contacts = new ArrayList<>();
+
     /**
      * ArrayList containing the Strings for the selectoneMenu of Type.
      */
@@ -64,8 +58,8 @@ public class AufgabeZweiDialogController implements Serializable {
     private final List<String> sexs = new ArrayList<>();
 
     // Getter
-    public String getViolationMessage() {
-        return violationMessage;
+    public ArrayList<Contact> getContacts() {
+        return contacts;
     }
 
     public ArrayList<Communication> getCommunications() {
@@ -78,14 +72,6 @@ public class AufgabeZweiDialogController implements Serializable {
 
     public Contact getContact() {
         return contact;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public ArrayList<Contact> getContacts() {
-        return contacts;
     }
 
     public List<String> getTypes() {
@@ -110,14 +96,6 @@ public class AufgabeZweiDialogController implements Serializable {
     }
 
     /**
-     * Sets the inputs to an address.
-     */
-    public void createNewAddress() {
-        addresses.add(address);
-        address = new Address();
-    }
-
-    /**
      * Saves the inputed Strings to a new Contact when there is no
      * violationMessage and holds it in contacts ArrayList.
      */
@@ -128,13 +106,20 @@ public class AufgabeZweiDialogController implements Serializable {
         for (Communication communication : communications) {
             contact.getCommunications().add(communication);
         }
-        if (contact.getViolationMessage() == null) {
-            contacts.add(contact);
-            contact = new Contact();
-            communications = new ArrayList();
-            addresses = new ArrayList();
-        } else {
-            violationMessage = contact.getViolationMessage();
-        }
+        //if (contact.getViolationMessage() == null) {
+        contacts.add(contact);
+
+        //} else {
+        // violationMessage = contact.getViolationMessage();
+        //}
+    }
+    /**
+     * Clears Contact all its Communications and its Adresses.
+     */
+    public void clearContactInformation() {
+        L.info("clearContactInformation() wurde aufgerufen");
+        contact = new Contact();
+        communications = new ArrayList();
+        addresses = new ArrayList();
     }
 }

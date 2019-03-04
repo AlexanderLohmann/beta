@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Aufgabe 2 Contacts Dialog</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style>
+            .top-aligned tr{
+                vertical-align: top;
+            }
+        </style>
+    </h:head>
+    <h:body>        
+        <h1>Kontakte </h1>
+        <br/>
+        <h:form id="table">
+            <p:commandButton value="Kontakt Hinzufügen" update="dialog" process="@this" oncomplete="PF('contacts').show();"/>
+            <p:dataTable var="contact" value="#{ContactDialogController.contacts}" id="contact" emptyMessage="Leer">
+                <f:facet name="header">
+                    <h1>Kontakte</h1>
+                </f:facet>
+                <p:column headerText="Titel">
+                    <h:outputText value="#{contact.title}"/>
+                </p:column>
+                <p:column headerText="Vorname">
+                    <h:outputText value="#{contact.firstName}"/>
+                </p:column>
+                <p:column headerText="Nachname">
+                    <h:outputText value="#{contact.lastName}"/>
+                </p:column>
+                <p:column headerText="Geschlecht">
+                    <h:outputText value="#{contact.sex}"/>
+                </p:column>
+                <p:column headerText="Anschrift">
+                    <p:dataList id="adresses" var="adress" type="definition" value="#{contact.addresses}" emptyMessage="Nicht Eingetragen">
+                        <h:outputText value="#{adress.street}"/>
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="Postleitzahl">
+                    <p:dataList id="zipcode" var="zipcode" type="definition" value="#{contact.addresses}" emptyMessage="Nicht Eingetragen">
+                        <h:outputText  value="#{zipcode.zipCode}" />
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="Stadt">
+                    <p:dataList id="city" var="city" type="definition" value="#{contact.addresses}" emptyMessage="Nicht Eingetragen">
+                        <h:outputText  value="#{city.city}" />
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="Land">
+                    <p:dataList id="country" var="country" type="definition" value="#{contact.addresses}" emptyMessage="Nicht Eingetragen">
+                        <h:outputText value="#{country.country.countryName}"/>
+                    </p:dataList>
+                </p:column>
+                <p:column headerText="Communications" >
+                    <p:dataList value="#{contact.communications}" type="definition" var="communications" emptyMessage="Nicht Eingetragen">
+                        <h:outputText value="#{communications.type}: "/> 
+                        <h:outputText value="#{communications.identifier}"/>
+                    </p:dataList>
+                </p:column>
+            </p:dataTable> 
+        </h:form>  
+        <p:dialog header="Kontakt Hinzufügen" id="contactDialog" widgetVar="contacts"  
+                  modal="true">
+            <p:ajax event="close" listener="#{ContactDialogController.clearContactInformation()}"/>
+            <h:form id="dialog">
+                <p:panelGrid columns="3" class="ui-panelgrid-blank top-aligned">
+                    <p:panelGrid columns="2" class="ui-panelgrid-blank">
+                        <h:outputText value="Titel: "/> <h:inputText  value="#{ContactDialogController.contact.title}"/>
+                        <h:outputText value="Vorname: "/> <h:inputText  value="#{ContactDialogController.contact.firstName}"/>
+                        <h:outputText value=" Nachname: "/> <h:inputText value="#{ContactDialogController.contact.lastName}"/>
+                        <p:outputLabel for="sex" value="Geschlecht:" />
+                        <p:selectOneMenu id="sex" value="#{ContactDialogController.contact.sex}" style="width:125px">
+                            <f:selectItem itemLabel="Bitte Auswählen" itemValue="" />
+                            <f:selectItems value="#{ContactDialogController.sexs}" />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:dataList emptyMessage="Keine Adressen Hinzugefügt" value="#{ContactDialogController.addresses}"  var="currentAdresses">
+                        <f:facet name="header">
+                            <h:outputText value="Adressen"/>
+                            <p:commandButton update="address" oncomplete="PF('address').show();" icon="fa fa-fw fa-plus" style="float: right; height: 22px; width: 27px;"/>
+                        </f:facet>                   
+                        <h:outputText value="#{currentAdresses.street} "/> 
+                        <h:outputText value="#{currentAdresses.zipCode} "/>
+                        <h:outputText value="#{currentAdresses.city} "/>
+                    </p:dataList>
+                    <p:dataList emptyMessage="Keine Kommunikationen Hinzugefügt" value="#{ContactDialogController.communications}" var="currentCommunications">
+                        <f:facet name="header">
+                            <h:outputText value="Kommunikationen"/>
+                            <p:commandButton update="communication" oncomplete="PF('communication').show();" icon="fa fa-fw fa-plus"
+                                             style="float: right; height: 22px; width: 27px;"/>
+                        </f:facet>
+                        <h:outputText value="#{currentCommunications.type} :"/> 
+                        <h:outputText value="#{currentCommunications.identifier}"/>
+                    </p:dataList>
+                </p:panelGrid>
+            </h:form>
+            <f:facet name="footer">
+                <h:panelGrid columns="2" id="contactbuttons" class="ui-panelgrid-blank" style="float: right;">
+                    <p:commandButton value="Speichern" update="dialog,table" form="dialog"
+                                     oncomplete="PF('contacts').hide();" action="#{ContactDialogController.createNewContact()}"/> 
+                    <p:commandButton  value="Abbrechen" update="dialog" process="@this" oncomplete="PF('contacts').hide();" />
+                </h:panelGrid>
+            </f:facet>
+        </p:dialog>
+        <p:dialog header="Adresse Hinzufügen" widgetVar="address" modal="true" height="150">
+            <h:form id="address">
+                <h:panelGrid columns="2" class="ui-panelgrid-blank">
+                    <h:outputText value="Straße: "/> <h:inputText  value="#{AdressController.address.street}"></h:inputText> 
+                    <h:outputText value="Postleitzahl: "/> <h:inputText  value="#{AdressController.address.zipCode}"></h:inputText>
+                    <h:outputText value="Stadt: "/> <h:inputText value="#{AdressController.address.city}"></h:inputText>
+                </h:panelGrid> 
+            </h:form> 
+            <f:facet name="footer">
+                <p:panelGrid columns="2" style="float: right;" class="ui-panelgrid-blank">
+                    <p:commandButton value="Speichern" update="address,dialog" oncomplete="PF('address').hide();" action="#{AdressController.createNewAddress()}" form="address"/> 
+                    <p:commandButton value="Abbrechen" update="address" oncomplete="PF('address').hide();" />
+                </p:panelGrid>
+            </f:facet>
+        </p:dialog>
+        <p:dialog header="Kommunikation Hinzufügen" widgetVar="communication" modal="true" height="150">
+            <h:form id="communication">
+                <p:panelGrid id="comGrid" columns="2" class="ui-panelgrid-blank">
+                    <p:selectOneMenu id="type" value="#{CommunicationController.communication.type}" style="width:125px" 
+                                     required="true" requiredMessage="Bitte zuerst eine Kommunikationsart auswählen">
+                        <f:selectItem itemLabel="Bitte Auswählen"  itemValue="#{null}" noSelectionOption="true"/>
+                        <f:selectItems value="#{ContactDialogController.types}" />
+                    </p:selectOneMenu >
+                    <p:message for="type" id="typeMessage" display="text"/>
+                    <p:inputText id="cominput" widgetVar="textInput" required="true" value="#{CommunicationController.communication.identifier}" 
+                                 requiredMessage="Kommunikationswert muss hinterlegt werden."/>
+                    <p:message for="cominput" id="comMessage" display="text"/>
+                </p:panelGrid>
+            </h:form>
+            <f:facet name="footer">
+                <h:panelGrid columns="2" class="ui-panelgrid-blank"> 
+                    <p:commandButton id="save" value="Speichern" update="communication,dialog" 
+                                     oncomplete="if(args &amp;&amp; !args.validationFailed) PF('communication').hide();" 
+                                     action="#{CommunicationController.createNewCommunication()}" form="communication" process="communication,@this"/>  
+                    <p:commandButton value="Abbrechen" type="button" onclick="PF('communication').hide();" />
+                </h:panelGrid>
+            </f:facet>
+        </p:dialog>
+    </h:body>
+</html>

@@ -23,9 +23,9 @@ import org.slf4j.LoggerFactory;
 public class AdressDialogController implements Serializable {
 
     private final Logger L = LoggerFactory.getLogger(CommunicationDialogController.class);
-    
+
     @Inject
-    private ContactDialogController contactDialogController;
+    private ContactsController contactDialogController;
     /**
      * Adress to save into adresslist after inputs.
      */
@@ -39,6 +39,6 @@ public class AdressDialogController implements Serializable {
      * Sets the inputs to an address.
      */
     public void createNewAddress() {
-        contactDialogController.getAddresses().add(address);
+        contactDialogController.getContact().getAddresses().add(address);
     }
 }

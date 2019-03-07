@@ -26,7 +26,7 @@ public class CommunicationDialogController implements Serializable {
     private final Logger L = LoggerFactory.getLogger(CommunicationDialogController.class);
 
     @Inject
-    private ContactDialogController contactDialogController;
+    private ContactsController contactDialogController;
 
     /**
      * Communication to save into communicationlist after inputs.
@@ -43,6 +43,6 @@ public class CommunicationDialogController implements Serializable {
      * input is valid it saves the Communication in an List.
      */
     public void createNewCommunication() {
-        contactDialogController.getCommunications().add(communication);
+        contactDialogController.getContact().getCommunications().add(communication);
     }
 }

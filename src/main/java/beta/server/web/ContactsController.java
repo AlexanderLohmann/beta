@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
  */
 @Named("ContactDialogController")
 @ViewScoped
-public class ContactDialogController implements Serializable {
+public class ContactsController implements Serializable {
 
-    private final Logger L = LoggerFactory.getLogger(CommunicationDialogController.class);
+    private final Logger L = LoggerFactory.getLogger(ContactsController.class);
 
     /**
      * ArrayList to store new Contacts in.
@@ -39,14 +39,6 @@ public class ContactDialogController implements Serializable {
      * Contact to save in ContactList after inputs.
      */
     private Contact contact = new Contact();
-    /**
-     * List to save inputed Communication in to use later for an new Contact.
-     */
-    private ArrayList<Communication> communications = new ArrayList<>();
-    /**
-     * List to save inputed Adress in to use later for an new Contact.
-     */
-    private ArrayList<Address> addresses = new ArrayList<>();
 
     /**
      * ArrayList containing the Strings for the selectoneMenu of Type.
@@ -60,14 +52,6 @@ public class ContactDialogController implements Serializable {
     // Getter
     public ArrayList<Contact> getContacts() {
         return contacts;
-    }
-
-    public ArrayList<Communication> getCommunications() {
-        return communications;
-    }
-
-    public ArrayList<Address> getAddresses() {
-        return addresses;
     }
 
     public Contact getContact() {
@@ -100,26 +84,20 @@ public class ContactDialogController implements Serializable {
      * violationMessage and holds it in contacts ArrayList.
      */
     public void createNewContact() {
-        for (Address addresse : addresses) {
-            contact.getAddresses().add(addresse);
-        }
-        for (Communication communication : communications) {
-            contact.getCommunications().add(communication);
-        }
+//        contact.getAddresses().addAll(addresses);
+//        contact.getCommunications().addAll(communications);
         //if (contact.getViolationMessage() == null) {
         contacts.add(contact);
-
         //} else {
         // violationMessage = contact.getViolationMessage();
         //}
     }
+
     /**
      * Clears Contact all its Communications and its Adresses.
      */
-    public void clearContactInformation() {
+    public void getNewContact() {
         L.info("clearContactInformation() wurde aufgerufen");
         contact = new Contact();
-        communications = new ArrayList();
-        addresses = new ArrayList();
     }
 }

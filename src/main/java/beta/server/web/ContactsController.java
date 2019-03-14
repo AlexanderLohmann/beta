@@ -84,8 +84,7 @@ public class ContactsController implements Serializable {
      * violationMessage and holds it in contacts ArrayList.
      */
     public void createNewContact() {
-//        contact.getAddresses().addAll(addresses);
-//        contact.getCommunications().addAll(communications);
+
         //if (contact.getViolationMessage() == null) {
         contacts.add(contact);
         //} else {
@@ -97,7 +96,7 @@ public class ContactsController implements Serializable {
      * Clears Contact all its Communications and its Adresses.
      */
     public void getNewContact() {
-        L.info("clearContactInformation() wurde aufgerufen");
+        L.info("getNewContact() wurde aufgerufen");
         contact = new Contact();
     }
 }

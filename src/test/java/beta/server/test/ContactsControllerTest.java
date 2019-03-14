@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author alexander.lohmann
  */
-public class ContactDialogControllerTest {
+public class ContactsControllerTest {
 
     ContactsController controller = new ContactsController();
 
@@ -31,5 +31,11 @@ public class ContactDialogControllerTest {
         assertThat(controller.getContact().getFirstName()).as("Should be Null").isNull();
         assertThat(controller.getContact().getLastName()).as("Should be Null").isNull();
         assertThat(controller.getContact().getTitle()).as("Should be Null").isNull();
+    }
+
+    @Test
+    public void isContactSaved() {
+        controller.createNewContact();
+        assertThat(controller.getContacts()).as("Should be an size of 1").hasSize(1);
     }
 }
